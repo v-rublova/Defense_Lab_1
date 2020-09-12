@@ -39,7 +39,7 @@ namespace Lab_1
         public static int ListLength(List<string> list)
         {
             int length = 0;
-            foreach(string val in list)
+            foreach (string val in list)
             {
                 length += val.Length;
             }
@@ -120,12 +120,12 @@ namespace Lab_1
     {
         static void Main(string[] args)
         {
+
             Coding coder = new Coding();
             Decoding decoder = new Decoding();
 
             //message
-            //string FIO = "Rublova Viktoriia Hryhorivna";
-            string FIO = "Rublova Viktoriia";
+            string FIO = "Rublova Viktoriia Hryhorivna";
             Console.WriteLine("Message: " + FIO);
             //error list
             List<double> error_prob = new List<double> {5*Math.Pow(10,-2),
@@ -143,8 +143,8 @@ namespace Lab_1
 
             //coding   
             coder.Hamming_Coded(FIO, ref coded_Hamming);
-            coder.CRC4_Coded(FIO,ref coded_CRC);
-            for(int j = 0; j < 10; j++)
+            coder.CRC4_Coded(FIO, ref coded_CRC);
+            for (int j = 0; j < 1; j++)
             {
                 for (int i = 0; i < error_prob.Count; i++)
                 {
@@ -159,26 +159,47 @@ namespace Lab_1
                     //output
                     Console.WriteLine("Error probability: " + error_prob[i].ToString());
 
-                    //Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
-                   // Console.WriteLine("Time:" + Globals.calculation_time_Hamming.Last().ToString());
-                    //Console.WriteLine("Decoded using CRC:    " + decoded_crc);
+                    Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
+                    //Console.WriteLine("Time:" + Globals.calculation_time_Hamming.Last().ToString());
+                    Console.WriteLine("Decoded using CRC:    " + decoded_crc);
                     //Console.WriteLine("Time:" + Globals.calculation_time_CRC.Last().ToString());
                 }
-                Console.WriteLine(Globals.calculation_time_CRC[j * 5 + 0] + " " +
-                    Globals.calculation_time_CRC[j * 5 + 1] + " " +
-                    Globals.calculation_time_CRC[j * 5 + 2] + " " +
-                    Globals.calculation_time_CRC[j * 5 + 3] + " " +
-                    Globals.calculation_time_CRC[j * 5 + 4] + " ");
+                //Console.WriteLine(Globals.calculation_time_CRC[j * 5 + 0] + " " +
+                //    Globals.calculation_time_CRC[j * 5 + 1] + " " +
+                //    Globals.calculation_time_CRC[j * 5 + 2] + " " +
+                //    Globals.calculation_time_CRC[j * 5 + 3] + " " +
+                //    Globals.calculation_time_CRC[j * 5 + 4] + " ");
 
-                Console.WriteLine(Globals.calculation_time_Hamming[j * 5 + 0] + " "+
-                    Globals.calculation_time_Hamming[j * 5 + 1] + " " +
-                    Globals.calculation_time_Hamming[j * 5 + 2] + " " +
-                    Globals.calculation_time_Hamming[j * 5 + 3] + " " +
-                    Globals.calculation_time_Hamming[j * 5 + 4]);
+                //Console.WriteLine(Globals.calculation_time_Hamming[j * 5 + 0] + " "+
+                //    Globals.calculation_time_Hamming[j * 5 + 1] + " " +
+                //    Globals.calculation_time_Hamming[j * 5 + 2] + " " +
+                //    Globals.calculation_time_Hamming[j * 5 + 3] + " " +
+                //    Globals.calculation_time_Hamming[j * 5 + 4]);
             }
-            
-
-
+            //for (int k = 0; k < 5; k++)
+            //{
+            //    double sum = 0;
+            //    int count = 0;
+            //    for (int i = 0; i < Globals.calculation_time_CRC.Count; i += 5)
+            //    {
+            //        sum += Globals.calculation_time_CRC[k + i];
+            //        count++;
+            //    }
+            //    Console.WriteLine(sum/count);
+            //}
+            //Console.WriteLine("Part");
+            //for (int k = 0; k < 5; k++)
+            //{
+            //    double sum = 0;
+            //    int count = 0;
+            //    for (int i = 0; i < Globals.calculation_time_Hamming.Count; i += 5)
+            //    {
+            //        sum += Globals.calculation_time_Hamming[k + i];
+            //        count++;
+            //    }
+            //    Console.WriteLine(sum / count);
+            //}
+            //Console.WriteLine("Finish");
             Console.ReadKey();
         }
     }

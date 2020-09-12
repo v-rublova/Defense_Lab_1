@@ -491,13 +491,13 @@ namespace Lab_1
             coded_data = new List<string>();
 
             List<byte> data = MessagetoBinary_C(message);
-            
-            for(int i = 0; i < data.Count; i+=4)
+
+            for (int i = 0; i < data.Count; i += 4)
             {
                 string raw_data = "";
-                for (int j = 0; j < 4 && j+i<data.Count; j++)
+                for (int j = 0; j < 4 && j + i < data.Count; j++)
                 {
-                    raw_data += Convert.ToString(data[i+j], 2).PadLeft(8, '0');
+                    raw_data += Convert.ToString(data[i + j], 2).PadLeft(8, '0');
                 }
                 //11
                 string check_1 = Globals.CreateChecksum(String.Concat(raw_data, "000"),
