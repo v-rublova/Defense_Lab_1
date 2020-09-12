@@ -11,48 +11,48 @@ namespace Lab_1
     {
         static Random random;
 
-        public static List<bool> GenerateError(double probability, int size)
+        private static void GenerateErrorPool(double probability, int size,ref List<bool> target)
         {
-            int error_number = (int)(size * probability);
+            //int error_number = (int)Math.Ceiling((double)size * probability);
+            int error_number = (int)Math.Ceiling(((double)size / ((double)size * probability)));
             int error_idicator = 0;
-            List<bool> error_pool = new List<bool>();
+
+            target = new List<bool>();
 
             for (int i = 0; i < size; i++)
             {
                 if (error_idicator == error_number)
                 {
                     error_idicator = 0;
-                    error_pool.Add(true);
+                    target.Add(true);
                 }
                 else
                 {
                     error_idicator++;
-                    error_pool.Add(false);
+                    target.Add(false);
                 }
             }
-            //random = new Random(DateTime.Now.Millisecond);
+        }
+        public static List<bool> GenerateError(int iteration, int size, List<bool> target)
+        {
+            List<bool> error_pool = new List<bool>();
 
-            //List<bool> error_pool = new List<bool>();
-            //for (int i = 0; i < size; i++)
-            //{
-            //    if (random.NextDouble() <= probability)
-            //    {
-            //        error_pool.Add(true);
-            //    }
-            //    else
-            //    {
-            //        error_pool.Add(false);
-            //    }
-            //}
+            for (int i = 0; i < size; i++)
+            {
+                error_pool.Add(target[i+iteration]);
+            }
             return error_pool;
         }
         public static List<string> ApplyErrors(List<string> data, double prob)
         {
             List<string> dat = new List<string>();
-
+            int block = 0;
+            GenerateErrorPool(prob, Globals.ListLength(data), ref Globals.errors_CRC);
             for (int i = 0; i < data.Count; i++)
             {
-                List<bool> errors = GenerateError(prob, data[i].Length);
+                if (i == 0) block = 0;
+                else block = data[i - 1].Length;
+                List<bool> errors = GenerateError(i*block, data[i].Length, Globals.errors_CRC);
                 BitArray err = new BitArray(errors.ToArray());
                 BitArray dt = new BitArray(Globals.StringtoBitArray(data[i]).ToArray());
                 dt.Xor(err);
@@ -63,9 +63,13 @@ namespace Lab_1
         public static List<List<bool>> ApplyErrors(List<List<bool>> data, double prob)
         {
             List<List<bool>> dat = new List<List<bool>>();
+            int block = 0;
+            GenerateErrorPool(prob, Globals.ListLength(data), ref Globals.errors_Hamming);
             for(int i = 0; i < data.Count; i++)
             {
-                List<bool> errors = GenerateError(prob, data[i].Count);
+                if (i == 0) block = 0;
+                else block = data[i - 1].Count;
+                List<bool> errors = GenerateError(i * block, data[i].Count, Globals.errors_Hamming);
                 BitArray err = new BitArray(errors.ToArray());
                 BitArray dt = new BitArray(data[i].ToArray());
                 dt.Xor(err);

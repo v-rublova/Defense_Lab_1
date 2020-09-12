@@ -486,9 +486,9 @@ namespace Lab_1
         }
         #endregion CRC_1
         #region Hamming
-        public List<string> CRC4_Coded(string message)
+        public void CRC4_Coded(string message, ref List<string> coded_data)
         {
-            List<string> coded_data = new List<string>();
+            coded_data = new List<string>();
 
             List<byte> data = MessagetoBinary_C(message);
             
@@ -514,7 +514,6 @@ namespace Lab_1
 
                 coded_data.Add(String.Concat(raw_data, check_1, check_2, check_3, check_4));
             }
-            return coded_data;
         }
 
         void Block_Coding(ref List<List<bool>> code, int i, byte b, int push)

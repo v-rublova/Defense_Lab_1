@@ -31,8 +31,29 @@ namespace Lab_1
         public static List<double> calculation_time_Hamming;
         public static List<double> calculation_time_CRC;
 
+        public static List<bool> errors_Hamming;
+        public static List<bool> errors_CRC;
+
         public static Stopwatch stopwatch;
 
+        public static int ListLength(List<string> list)
+        {
+            int length = 0;
+            foreach(string val in list)
+            {
+                length += val.Length;
+            }
+            return length;
+        }
+        public static int ListLength(List<List<bool>> list)
+        {
+            int length = 0;
+            foreach (List<bool> val in list)
+            {
+                length += val.Count;
+            }
+            return length;
+        }
         public static char Not(char c)
         {
             if (c == '1') return '0';
@@ -103,7 +124,8 @@ namespace Lab_1
             Decoding decoder = new Decoding();
 
             //message
-            string FIO = "Rublova Viktoriia Hryhorivna";
+            //string FIO = "Rublova Viktoriia Hryhorivna";
+            string FIO = "Rublova Viktoriia";
             Console.WriteLine("Message: " + FIO);
             //error list
             List<double> error_prob = new List<double> {5*Math.Pow(10,-2),
@@ -113,30 +135,48 @@ namespace Lab_1
             List<List<bool>> coded_Hamming = new List<List<bool>>();
             List<string> coded_CRC = new List<string>();
 
+            List<string> coded_CRC_err = new List<string>();
+            List<List<bool>> coded_Hamming_err = new List<List<bool>>();
             //decoded storage
             string decoded_Hamming = "";
             string decoded_crc = "";
 
             //coding   
             coder.Hamming_Coded(FIO, ref coded_Hamming);
-            coded_CRC = coder.CRC4_Coded(FIO);
-
-            for (int i = 0; i < error_prob.Count; i++)
+            coder.CRC4_Coded(FIO,ref coded_CRC);
+            for(int j = 0; j < 10; j++)
             {
-                //errors
-                coded_Hamming = Error_Gen.ApplyErrors(coded_Hamming, error_prob[i]);
-                coded_CRC = Error_Gen.ApplyErrors(coded_CRC, error_prob[i]);
+                for (int i = 0; i < error_prob.Count; i++)
+                {
+                    //errors
+                    coded_Hamming_err = Error_Gen.ApplyErrors(coded_Hamming, error_prob[i]);
+                    coded_CRC_err = Error_Gen.ApplyErrors(coded_CRC, error_prob[i]);
 
-                //decode
-                decoded_crc = decoder.CRC4_Decoded(coded_CRC);
-                decoded_Hamming = decoder.Hamming_Decoded(coded_Hamming);
+                    //decode
+                    decoded_crc = decoder.CRC4_Decoded(coded_CRC_err);
+                    decoded_Hamming = decoder.Hamming_Decoded(coded_Hamming_err);
 
-                //output
-                Console.WriteLine("Error probability: " + error_prob[i].ToString());
+                    //output
+                    Console.WriteLine("Error probability: " + error_prob[i].ToString());
 
-                Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
-                Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
+                    //Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
+                   // Console.WriteLine("Time:" + Globals.calculation_time_Hamming.Last().ToString());
+                    //Console.WriteLine("Decoded using CRC:    " + decoded_crc);
+                    //Console.WriteLine("Time:" + Globals.calculation_time_CRC.Last().ToString());
+                }
+                Console.WriteLine(Globals.calculation_time_CRC[j * 5 + 0] + " " +
+                    Globals.calculation_time_CRC[j * 5 + 1] + " " +
+                    Globals.calculation_time_CRC[j * 5 + 2] + " " +
+                    Globals.calculation_time_CRC[j * 5 + 3] + " " +
+                    Globals.calculation_time_CRC[j * 5 + 4] + " ");
+
+                Console.WriteLine(Globals.calculation_time_Hamming[j * 5 + 0] + " "+
+                    Globals.calculation_time_Hamming[j * 5 + 1] + " " +
+                    Globals.calculation_time_Hamming[j * 5 + 2] + " " +
+                    Globals.calculation_time_Hamming[j * 5 + 3] + " " +
+                    Globals.calculation_time_Hamming[j * 5 + 4]);
             }
+            
 
 
             Console.ReadKey();

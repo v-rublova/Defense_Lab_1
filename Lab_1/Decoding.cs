@@ -239,7 +239,7 @@ namespace Lab_1
                 decoded+= this.CRC_Decoded(data);
             }
             Globals.stopwatch.Stop();
-            Globals.calculation_time_CRC.Add(Globals.stopwatch.ElapsedMilliseconds);
+            Globals.calculation_time_CRC.Add(Globals.stopwatch.Elapsed.TotalMilliseconds);
             return decoded;
         }
         string Block_Decoding(List<bool> coded_data)
@@ -299,7 +299,7 @@ namespace Lab_1
                 }
             }
             Globals.stopwatch.Stop();
-            Globals.calculation_time_CRC.Add(Globals.stopwatch.ElapsedMilliseconds);
+            Globals.calculation_time_Hamming.Add(Globals.stopwatch.Elapsed.TotalMilliseconds);
             return output;
         }
     }
