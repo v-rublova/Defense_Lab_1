@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Collections;
 
 namespace Lab_1
 {
-
     public class Coding
     {
-        //List<List<bool>> Hamming_code;
-
         public Coding()
         {
+            Globals.stopwatch = new System.Diagnostics.Stopwatch();
+            Globals.calculation_time_Hamming = new List<double>();
+            Globals.calculation_time_CRC = new List<double>();
+
             Globals.Field_13 = new Dictionary<string, int>
             {
                 {"001",0 },
@@ -48,6 +47,7 @@ namespace Lab_1
                 {"100",2 },
                 {"111",3 }
             };
+
             Globals.CRC_table_1 = new Dictionary<byte, string>
             {
                 { 0, "a" },

@@ -6,54 +6,7 @@ namespace Lab_1
     class Decoding
     {
         public Decoding() { }
-        //public string CRC_Decoded(string coded_message)
-        //{
-        //    int error_counter = 0, sum_flag = 0;
-        //    string output = "";
-        //    string letter = "";
-        //    string buffer = "";
-        //    bool parity_bit_new = false;
-        //    bool upper_case = false;
-        //    for (int i = 0; i < coded_message.Length; i++)
-        //    {
-        //        if (sum_flag == 3)
-        //        {
-        //            //new sum
-        //            parity_bit_new = (Globals.ChartoBit(coded_message[i - 3]) ^
-        //                Globals.ChartoBit(coded_message[i - 2]) ^
-        //                Globals.ChartoBit(coded_message[i - 1]));
-        //            if (parity_bit_new != Globals.ChartoBit(coded_message[i]))
-        //            {
-        //                error_counter++;
-        //            }
-        //            sum_flag = 0;
-        //        }
-        //        else
-        //        {
-        //            sum_flag++;
-        //            if (letter.Length >= 8)
-        //            {
-        //                if (Globals.CRC_table.TryGetValue(Convert.ToByte(letter, 2), out buffer))
-        //                {
-        //                    if (buffer == "прописная") upper_case = true;
-        //                    else
-        //                    {
-        //                        if (upper_case)
-        //                        {
-        //                            upper_case = false;
-        //                            output += buffer.ToUpper();
-        //                        }
-        //                        else
-        //                            output += buffer;
-        //                    }
-        //                }
-        //                letter = "";
-        //            }
-        //            letter += coded_message[i];
-        //        }
-        //    }
-        //    return output;
-        //}
+        
         public string CRC_Decoded(string coded_message)
         {
             string output = "";
@@ -241,7 +194,8 @@ namespace Lab_1
         public string CRC4_Decoded(List<string> message)
         {
             string decoded = "";
-            foreach(string coded_message in message)
+            Globals.stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            foreach (string coded_message in message)
             {
                 string data = coded_message.Substring(0, coded_message.Length - 12);
                 string cs_1_data = String.Concat(data, coded_message.Substring(coded_message.Length - 12, 3));//11
@@ -284,6 +238,8 @@ namespace Lab_1
                 //decode at last
                 decoded+= this.CRC_Decoded(data);
             }
+            Globals.stopwatch.Stop();
+            Globals.calculation_time_CRC.Add(Globals.stopwatch.ElapsedMilliseconds);
             return decoded;
         }
         string Block_Decoding(List<bool> coded_data)
@@ -330,6 +286,7 @@ namespace Lab_1
         {
             string letter = "";
             string output = "";
+            Globals.stopwatch = System.Diagnostics.Stopwatch.StartNew();
             foreach (List<bool> l_b in code)
             {
                 letter += Block_Decoding(l_b);
@@ -341,6 +298,8 @@ namespace Lab_1
                     letter = "";
                 }
             }
+            Globals.stopwatch.Stop();
+            Globals.calculation_time_CRC.Add(Globals.stopwatch.ElapsedMilliseconds);
             return output;
         }
     }

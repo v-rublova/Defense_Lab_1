@@ -13,20 +13,37 @@ namespace Lab_1
 
         public static List<bool> GenerateError(double probability, int size)
         {
-            random = new Random(DateTime.Now.Millisecond);
-
+            int error_number = (int)(size * probability);
+            int error_idicator = 0;
             List<bool> error_pool = new List<bool>();
+
             for (int i = 0; i < size; i++)
             {
-                if (random.NextDouble() <= probability)
+                if (error_idicator == error_number)
                 {
+                    error_idicator = 0;
                     error_pool.Add(true);
                 }
                 else
                 {
+                    error_idicator++;
                     error_pool.Add(false);
                 }
             }
+            //random = new Random(DateTime.Now.Millisecond);
+
+            //List<bool> error_pool = new List<bool>();
+            //for (int i = 0; i < size; i++)
+            //{
+            //    if (random.NextDouble() <= probability)
+            //    {
+            //        error_pool.Add(true);
+            //    }
+            //    else
+            //    {
+            //        error_pool.Add(false);
+            //    }
+            //}
             return error_pool;
         }
         public static List<string> ApplyErrors(List<string> data, double prob)

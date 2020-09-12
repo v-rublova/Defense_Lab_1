@@ -4,22 +4,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using System.Diagnostics;
 
 namespace Lab_1
 {
+    /// <summary>
+    /// Globally used constants and methods
+    /// </summary>
     public static class Globals
     {
         #region globals
+        //CRC dictionary
         public static Dictionary<byte, string> CRC_table_1;
         public static Dictionary<byte, string> CRC_table_2;
         public static Dictionary<byte, string> CRC_table_3;
         public static Dictionary<byte, string> CRC_table_4;
         public static Dictionary<byte, string> CRC_table_5;
 
+        //Galois fields for polynomials
         public static Dictionary<string, int> Field_11;
         public static Dictionary<string, int> Field_13;
         public static Dictionary<string, int> Field_14;
         public static Dictionary<string, int> Field_15;
+
+        //measurements
+        public static List<double> calculation_time_Hamming;
+        public static List<double> calculation_time_CRC;
+
+        public static Stopwatch stopwatch;
 
         public static char Not(char c)
         {
@@ -39,7 +51,7 @@ namespace Lab_1
         public static List<bool> StringtoBitArray(string str)
         {
             List<bool> data = new List<bool>();
-            for(int i = 0; i < str.Length; i++)
+            for (int i = 0; i < str.Length; i++)
             {
                 data.Add(ChartoBit(str[i]));
             }
@@ -87,30 +99,46 @@ namespace Lab_1
     {
         static void Main(string[] args)
         {
+            Coding coder = new Coding();
+            Decoding decoder = new Decoding();
+
             //message
-            string FIO = "Rublova Viktoriia Hryhorevna";
-            //string FIO = "Rub";
+            string FIO = "Rublova Viktoriia Hryhorivna";
+            Console.WriteLine("Message: " + FIO);
+            //error list
+            List<double> error_prob = new List<double> {5*Math.Pow(10,-2),
+            3*Math.Pow(10,-2),2*Math.Pow(10,-2),Math.Pow(10,-2),9*Math.Pow(10,-3)};
+
             //coded storage
             List<List<bool>> coded_Hamming = new List<List<bool>>();
-            List<string> coded_crc = new List<string>();
+            List<string> coded_CRC = new List<string>();
+
             //decoded storage
             string decoded_Hamming = "";
             string decoded_crc = "";
-            //coding
-            Coding coder = new Coding();
 
+            //coding   
             coder.Hamming_Coded(FIO, ref coded_Hamming);
-            coded_crc = coder.CRC4_Coded(FIO);
+            coded_CRC = coder.CRC4_Coded(FIO);
 
-            Decoding decoder = new Decoding();
-            //5 * Math.Pow(10, -2)
-            coded_Hamming = Error_Gen.ApplyErrors(coded_Hamming, 0.1);
-            coded_crc =Error_Gen.ApplyErrors(coded_crc, 0.1);
+            for (int i = 0; i < error_prob.Count; i++)
+            {
+                //errors
+                coded_Hamming = Error_Gen.ApplyErrors(coded_Hamming, error_prob[i]);
+                coded_CRC = Error_Gen.ApplyErrors(coded_CRC, error_prob[i]);
 
-            decoded_crc=decoder.CRC4_Decoded(coded_crc);
-            decoded_Hamming = decoder.Hamming_Decoded(coded_Hamming);
+                //decode
+                decoded_crc = decoder.CRC4_Decoded(coded_CRC);
+                decoded_Hamming = decoder.Hamming_Decoded(coded_Hamming);
 
-            Console.WriteLine(decoded_Hamming + " " + decoded_crc);
+                //output
+                Console.WriteLine("Error probability: " + error_prob[i].ToString());
+
+                Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
+                Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
+            }
+
+
             Console.ReadKey();
         }
     }
