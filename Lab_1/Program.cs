@@ -186,7 +186,7 @@ namespace Lab_1
             //        sum += Globals.calculation_time_CRC[k + i];
             //        count++;
             //    }
-            //    Console.WriteLine(sum/count);
+            //    Console.WriteLine(sum / count);
             //}
             //Console.WriteLine("Part");
             //for (int k = 0; k < 5; k++)

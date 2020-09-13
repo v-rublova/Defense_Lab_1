@@ -421,7 +421,6 @@ namespace Lab_1
 
             };
         }
-        #region CRC_1
         byte[] MessagetoBinary_H(string message)
         {
             return Encoding.ASCII.GetBytes(message);
@@ -444,58 +443,17 @@ namespace Lab_1
             }
             return data;
         }
-        public string CRC_Coded(string message)
-        {
-            List<byte> data = MessagetoBinary_C(message);
-            string raw_data = "";
-            string coded_crc = "";
-            foreach (byte b in data)
-            {
-                raw_data += Convert.ToString(b, 2).PadLeft(8, '0');
-            }
-            for (int i = 0; i < raw_data.Length; i += 3)
-            {
-                if (i + 2 <= raw_data.Length - 1)
-                {
-                    coded_crc += String.Concat(raw_data[i], raw_data[i + 1], raw_data[i + 2]);
-                    coded_crc += Convert.ToInt32((Globals.ChartoBit(raw_data[i]) ^
-                        Globals.ChartoBit(raw_data[i + 1]) ^
-                        Globals.ChartoBit(raw_data[i + 2])));
-                }
-                else
-                {
-                    char dummy = '0';
-                    if (i + 1 > raw_data.Length)
-                    {
-                        coded_crc += String.Concat(raw_data[i], dummy, dummy);
-                        coded_crc += Convert.ToInt32((Globals.ChartoBit(raw_data[i]) ^
-                       Globals.ChartoBit(dummy) ^
-                     Globals.ChartoBit(dummy)));
-
-                    }
-                    else
-                    {
-                        coded_crc += String.Concat(raw_data[i], raw_data[i + 1], dummy);
-                        coded_crc += Convert.ToInt32((Globals.ChartoBit(raw_data[i]) ^
-                            Globals.ChartoBit(raw_data[i + 1]) ^
-                            Globals.ChartoBit(dummy)));
-                    }
-                }
-            }
-            return coded_crc;
-        }
-        #endregion CRC_1
-        #region Hamming
+        #region CRC
         public void CRC4_Coded(string message, ref List<string> coded_data)
         {
             coded_data = new List<string>();
 
             List<byte> data = MessagetoBinary_C(message);
 
-            for (int i = 0; i < data.Count; i += 4)
+            for (int i = 0; i < data.Count; i += 28)
             {
                 string raw_data = "";
-                for (int j = 0; j < 4 && j + i < data.Count; j++)
+                for (int j = 0; j <28 && j + i < data.Count; j++)
                 {
                     raw_data += Convert.ToString(data[i + j], 2).PadLeft(8, '0');
                 }
@@ -516,6 +474,8 @@ namespace Lab_1
             }
         }
 
+        #endregion CRC
+        #region Hamming
         void Block_Coding(ref List<List<bool>> code, int i, byte b, int push)
         {
             code.Add(new List<bool>());
@@ -558,6 +518,5 @@ namespace Lab_1
             }
         }
         #endregion Hamming
-
     }
 }
