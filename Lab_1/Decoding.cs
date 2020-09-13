@@ -5,36 +5,35 @@ namespace Lab_1
 {
     class Decoding
     {
-        public Decoding() { }
-        
+        public Decoding() { upper_case = false; }
+        static bool upper_case;
+
         public string CRC_Decoded(string coded_message)
         {
             string output = "";
             string letter = "";
             string buffer = "";
-            bool upper_case = false;
             for (int i = 0; i < coded_message.Length; i++)
             {
                 letter += coded_message[i];
                 if (letter.Length >= 8)
+                {
+                    if (Globals.CRC_table_1.TryGetValue(Convert.ToByte(letter, 2), out buffer))
                     {
-                        if (Globals.CRC_table_1.TryGetValue(Convert.ToByte(letter, 2), out buffer))
+                        if (buffer == "прописная") upper_case = true;
+                        else
                         {
-                            if (buffer == "прописная") upper_case = true;
-                            else
+                            if (upper_case)
                             {
-                                if (upper_case)
-                                {
-                                    upper_case = false;
-                                    output += buffer.ToUpper();
-                                }
-                                else
-                                    output += buffer;
+                                upper_case = false;
+                                output += buffer.ToUpper();
                             }
+                            else
+                                output += buffer;
                         }
-                        letter = "";
                     }
-                    
+                    letter = "";
+                }
             }
             return output;
         }
@@ -53,10 +52,10 @@ namespace Lab_1
                             int back_cycle = 0;
                             for (int i = 0; i < data_length + 3; i++)
                             {
-                                if (back_cycle == key) marker=marker.Insert(0, "1");
+                                if (back_cycle == key) marker = marker.Insert(0, "1");
                                 else
                                 {
-                                    marker=marker.Insert(0, "0");
+                                    marker = marker.Insert(0, "0");
                                 }
                                 back_cycle++;
                                 if (back_cycle == 7) back_cycle = 0;
@@ -66,7 +65,7 @@ namespace Lab_1
                         {
                             for (int i = 0; i < data_length + 3; i++)
                             {
-                                marker=marker.Insert(0, "0");
+                                marker = marker.Insert(0, "0");
                             }
                         }
                         break;
@@ -79,7 +78,7 @@ namespace Lab_1
                             int back_cycle = 0;
                             for (int i = 0; i < data_length + 3; i++)
                             {
-                                if (back_cycle == key) marker=marker.Insert(0, "1");
+                                if (back_cycle == key) marker = marker.Insert(0, "1");
                                 else
                                 {
                                     marker = marker.Insert(0, "0");
@@ -151,7 +150,7 @@ namespace Lab_1
                     }
                 default: break;
             }
-            return marker.Substring(0,marker.Length-3);
+            return marker.Substring(0, marker.Length - 3);
         }
         string GenerateErrorMarkers_1(string data)
         {
@@ -182,7 +181,7 @@ namespace Lab_1
                         }
                         else
                         {
-                            marker += "1110";
+                            marker += "1111";////////////////////////
                         }
                         is_empty = true;
                         sum_flag = 0;
@@ -202,7 +201,7 @@ namespace Lab_1
                 string cs_2_data = String.Concat(data, coded_message.Substring(coded_message.Length - 9, 3));//13
                 string cs_3_data = String.Concat(data, coded_message.Substring(coded_message.Length - 6, 3));//14
                 string cs_4_data = String.Concat(data, coded_message.Substring(coded_message.Length - 3, 3));//15
-                                                                                                             //11
+                //11
                 string check_1 = Globals.CreateChecksum(cs_1_data,
                     new List<bool> { true, true, false, true });
                 //13
@@ -236,7 +235,7 @@ namespace Lab_1
                     }
                 }
                 //decode at last
-                decoded+= this.CRC_Decoded(data);
+                decoded += this.CRC_Decoded(data);
             }
             Globals.stopwatch.Stop();
             Globals.calculation_time_CRC.Add(Globals.stopwatch.Elapsed.TotalMilliseconds);

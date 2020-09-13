@@ -35,6 +35,7 @@ namespace Lab_1
         public static List<bool> errors_CRC;
 
         public static Stopwatch stopwatch;
+        
 
         public static int ListLength(List<string> list)
         {

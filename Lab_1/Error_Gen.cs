@@ -52,7 +52,8 @@ namespace Lab_1
             {
                 if (i == 0) block = 0;
                 else block = data[i - 1].Length;
-                List<bool> errors = GenerateError(i*block, data[i].Length, Globals.errors_CRC);
+                //List<bool> errors = GenerateError(i*block, data[i].Length, Globals.errors_CRC);
+                List<bool> errors = Globals.errors_CRC.GetRange(i * block, data[i].Length);
                 BitArray err = new BitArray(errors.ToArray());
                 BitArray dt = new BitArray(Globals.StringtoBitArray(data[i]).ToArray());
                 dt.Xor(err);
