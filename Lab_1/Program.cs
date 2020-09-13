@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Lab_1
@@ -35,7 +32,7 @@ namespace Lab_1
         public static List<bool> errors_CRC;
 
         public static Stopwatch stopwatch;
-        
+
 
         public static int ListLength(List<string> list)
         {
@@ -121,14 +118,14 @@ namespace Lab_1
     {
         static void Main(string[] args)
         {
-
             Coding coder = new Coding();
             Decoding decoder = new Decoding();
 
             //message
             string FIO = "Rublova Viktoriia Hryhorivna";
             Console.WriteLine("Message: " + FIO);
-            //error list
+
+            //error probability list
             List<double> error_prob = new List<double> {5*Math.Pow(10,-2),
             3*Math.Pow(10,-2),2*Math.Pow(10,-2),Math.Pow(10,-2),9*Math.Pow(10,-3)};
 
@@ -136,8 +133,10 @@ namespace Lab_1
             List<List<bool>> coded_Hamming = new List<List<bool>>();
             List<string> coded_CRC = new List<string>();
 
+            //coded storage with errors applied
             List<string> coded_CRC_err = new List<string>();
             List<List<bool>> coded_Hamming_err = new List<List<bool>>();
+
             //decoded storage
             string decoded_Hamming = "";
             string decoded_crc = "";
@@ -145,62 +144,23 @@ namespace Lab_1
             //coding   
             coder.Hamming_Coded(FIO, ref coded_Hamming);
             coder.CRC4_Coded(FIO, ref coded_CRC);
-            for (int j = 0; j < 1; j++)
+
+            for (int i = 0; i < error_prob.Count; i++)
             {
-                for (int i = 0; i < error_prob.Count; i++)
-                {
-                    //errors
-                    coded_Hamming_err = Error_Gen.ApplyErrors(coded_Hamming, error_prob[i]);
-                    coded_CRC_err = Error_Gen.ApplyErrors(coded_CRC, error_prob[i]);
+                //errors
+                coded_Hamming_err = Error_Gen.ApplyErrors(coded_Hamming, error_prob[i]);
+                coded_CRC_err = Error_Gen.ApplyErrors(coded_CRC, error_prob[i]);
 
-                    //decode
-                    decoded_crc = decoder.CRC4_Decoded(coded_CRC_err);
-                    decoded_Hamming = decoder.Hamming_Decoded(coded_Hamming_err);
+                //decode
+                decoded_crc = decoder.CRC4_Decoded(coded_CRC_err);
+                decoded_Hamming = decoder.Hamming_Decoded(coded_Hamming_err);
 
-                    //output
-                    Console.WriteLine("Error probability: " + error_prob[i].ToString());
+                //output
+                Console.WriteLine("Error probability: " + error_prob[i].ToString());
 
-                    Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
-                    //Console.WriteLine("Time:" + Globals.calculation_time_Hamming.Last().ToString());
-                    Console.WriteLine("Decoded using CRC:    " + decoded_crc);
-                    //Console.WriteLine("Time:" + Globals.calculation_time_CRC.Last().ToString());
-                }
-                //Console.WriteLine(Globals.calculation_time_CRC[j * 5 + 0] + " " +
-                //    Globals.calculation_time_CRC[j * 5 + 1] + " " +
-                //    Globals.calculation_time_CRC[j * 5 + 2] + " " +
-                //    Globals.calculation_time_CRC[j * 5 + 3] + " " +
-                //    Globals.calculation_time_CRC[j * 5 + 4] + " ");
-
-                //Console.WriteLine(Globals.calculation_time_Hamming[j * 5 + 0] + " "+
-                //    Globals.calculation_time_Hamming[j * 5 + 1] + " " +
-                //    Globals.calculation_time_Hamming[j * 5 + 2] + " " +
-                //    Globals.calculation_time_Hamming[j * 5 + 3] + " " +
-                //    Globals.calculation_time_Hamming[j * 5 + 4]);
+                Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
+                Console.WriteLine("Decoded using CRC:    " + decoded_crc);
             }
-            //for (int k = 0; k < 5; k++)
-            //{
-            //    double sum = 0;
-            //    int count = 0;
-            //    for (int i = 0; i < Globals.calculation_time_CRC.Count; i += 5)
-            //    {
-            //        sum += Globals.calculation_time_CRC[k + i];
-            //        count++;
-            //    }
-            //    Console.WriteLine(sum / count);
-            //}
-            //Console.WriteLine("Part");
-            //for (int k = 0; k < 5; k++)
-            //{
-            //    double sum = 0;
-            //    int count = 0;
-            //    for (int i = 0; i < Globals.calculation_time_Hamming.Count; i += 5)
-            //    {
-            //        sum += Globals.calculation_time_Hamming[k + i];
-            //        count++;
-            //    }
-            //    Console.WriteLine(sum / count);
-            //}
-            //Console.WriteLine("Finish");
             Console.ReadKey();
         }
     }

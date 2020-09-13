@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Lab_1
 {
     public static class Error_Gen
     {
-        static Random random;
-
-        private static void GenerateErrorPool(double probability, int size,ref List<bool> target)
+        //errors for entire coded message
+        private static void GenerateErrorPool(double probability, int size, ref List<bool> target)
         {
-            //int error_number = (int)Math.Ceiling((double)size * probability);
-            int error_number = (int)Math.Ceiling(((double)size / ((double)size * probability)));
+            int error_number = (int)Math.Ceiling((double)size / ((double)size * probability));
             int error_idicator = 0;
 
             target = new List<bool>();
@@ -33,16 +28,7 @@ namespace Lab_1
                 }
             }
         }
-        public static List<bool> GenerateError(int iteration, int size, List<bool> target)
-        {
-            List<bool> error_pool = new List<bool>();
-
-            for (int i = 0; i < size; i++)
-            {
-                error_pool.Add(target[i+iteration]);
-            }
-            return error_pool;
-        }
+        //crc_errors
         public static List<string> ApplyErrors(List<string> data, double prob)
         {
             List<string> dat = new List<string>();
@@ -52,7 +38,6 @@ namespace Lab_1
             {
                 if (i == 0) block = 0;
                 else block = data[i - 1].Length;
-                //List<bool> errors = GenerateError(i*block, data[i].Length, Globals.errors_CRC);
                 List<bool> errors = Globals.errors_CRC.GetRange(i * block, data[i].Length);
                 BitArray err = new BitArray(errors.ToArray());
                 BitArray dt = new BitArray(Globals.StringtoBitArray(data[i]).ToArray());
@@ -61,16 +46,17 @@ namespace Lab_1
             }
             return dat;
         }
+        //hamming_errors
         public static List<List<bool>> ApplyErrors(List<List<bool>> data, double prob)
         {
             List<List<bool>> dat = new List<List<bool>>();
             int block = 0;
             GenerateErrorPool(prob, Globals.ListLength(data), ref Globals.errors_Hamming);
-            for(int i = 0; i < data.Count; i++)
+            for (int i = 0; i < data.Count; i++)
             {
                 if (i == 0) block = 0;
                 else block = data[i - 1].Count;
-                List<bool> errors = GenerateError(i * block, data[i].Count, Globals.errors_Hamming);
+                List<bool> errors = Globals.errors_Hamming.GetRange(i * block, data[i].Count);
                 BitArray err = new BitArray(errors.ToArray());
                 BitArray dt = new BitArray(data[i].ToArray());
                 dt.Xor(err);

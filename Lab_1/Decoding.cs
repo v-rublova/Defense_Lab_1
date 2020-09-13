@@ -7,7 +7,7 @@ namespace Lab_1
     {
         public Decoding() { upper_case = false; }
         static bool upper_case;
-
+        #region CRC
         public string CRC_Decoded(string coded_message)
         {
             string output = "";
@@ -241,6 +241,8 @@ namespace Lab_1
             Globals.calculation_time_CRC.Add(Globals.stopwatch.Elapsed.TotalMilliseconds);
             return decoded;
         }
+        #endregion CRC
+        #region Hamming
         string Block_Decoding(List<bool> coded_data)
         {
             //new check bits
@@ -301,5 +303,6 @@ namespace Lab_1
             Globals.calculation_time_Hamming.Add(Globals.stopwatch.Elapsed.TotalMilliseconds);
             return output;
         }
+        #endregion Hamming
     }
 }
