@@ -450,10 +450,10 @@ namespace Lab_1
 
             List<byte> data = MessagetoBinary_C(message);
 
-            for (int i = 0; i < data.Count; i += 28)
+            for (int i = 0; i < data.Count; i += 2)
             {
                 string raw_data = "";
-                for (int j = 0; j <28 && j + i < data.Count; j++)
+                for (int j = 0; j <2 && j + i < data.Count; j++)
                 {
                     raw_data += Convert.ToString(data[i + j], 2).PadLeft(8, '0');
                 }

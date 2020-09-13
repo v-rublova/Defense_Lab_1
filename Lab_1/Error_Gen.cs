@@ -9,8 +9,6 @@ namespace Lab_1
 {
     public static class Error_Gen
     {
-        static Random random;
-
         private static void GenerateErrorPool(double probability, int size,ref List<bool> target)
         {
             //int error_number = (int)Math.Ceiling((double)size * probability);
@@ -32,6 +30,11 @@ namespace Lab_1
                     target.Add(false);
                 }
             }
+            //Console.WriteLine("\nProbability:" + probability);
+            //foreach (bool b in target)
+            //{
+            //    Console.Write(Globals.BitToChar(b));
+            //}
         }
         public static List<bool> GenerateError(int iteration, int size, List<bool> target)
         {

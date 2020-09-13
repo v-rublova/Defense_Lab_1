@@ -144,6 +144,10 @@ namespace Lab_1
 
             //coding   
             coder.Hamming_Coded(FIO, ref coded_Hamming);
+            //foreach(List<bool> l in coded_Hamming)
+            //{
+            //    Console.WriteLine(Globals.BitArraytoString(new BitArray(l.ToArray())));
+            //}
             coder.CRC4_Coded(FIO, ref coded_CRC);
             for (int j = 0; j < 1; j++)
             {
@@ -158,11 +162,11 @@ namespace Lab_1
                     decoded_Hamming = decoder.Hamming_Decoded(coded_Hamming_err);
 
                     //output
-                    Console.WriteLine("Error probability: " + error_prob[i].ToString());
+                    //Console.WriteLine("Error probability: " + error_prob[i].ToString());
 
-                    Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
+                    //Console.WriteLine("Decoded using Hamming:" + decoded_Hamming);
                     //Console.WriteLine("Time:" + Globals.calculation_time_Hamming.Last().ToString());
-                    Console.WriteLine("Decoded using CRC:    " + decoded_crc);
+                    //Console.WriteLine("Decoded using CRC:    " + decoded_crc);
                     //Console.WriteLine("Time:" + Globals.calculation_time_CRC.Last().ToString());
                 }
                 //Console.WriteLine(Globals.calculation_time_CRC[j * 5 + 0] + " " +
